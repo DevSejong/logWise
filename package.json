@@ -1,0 +1,9 @@
+{
+    "name": "logWise",
+    "version": "0.0.1",
+    "description": "",
+    "dependencies": {
+        "express": "^4.4.3",
+        "socket.io": "^1.0.6"
+    }
+}
