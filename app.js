@@ -10,6 +10,8 @@ var users = require('./routers/viewRoutes/users');
 var logReceiver = require('./routers/logReceiverRouter/logReceiver');
 
 var app = express();
+var server = app.listen(3001);
+var io = require('socket.io')(server);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -47,7 +49,7 @@ if (app.get('env') === 'development') {
     });
 }
 
-// production error handler
+// production error hançdler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -57,5 +59,11 @@ app.use(function(err, req, res, next) {
     });
 });
 
+io.on('connection', function (socket) {
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function (data) {
+        console.log(data);
+    });
+});
 
 module.exports = app;

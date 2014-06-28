@@ -1,6 +1,5 @@
 var express = require('express');
-var io = require('socket.io')(server);
-
+var router = express.Router();
 
 router.post('/', function (req, res) {
     console.log(req.body.hello);
