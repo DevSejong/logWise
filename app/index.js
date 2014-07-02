@@ -10,31 +10,24 @@ app.get('/', function (req, res) {
 });
 
 app.post('/log', function (req, res) {
-    console.log(req.body);
-
     res.send(200, true);
 });
 
 var clients = [];
 io.on('connection', function (socket) {
-    clients.push(socket.id);
+    clients.push = socket.id;
     console.log("socket.id=" + socket.id + "가 등록되었습니다.");
 });
 
-var logCore = (function (clients, io) {
-    var sendLog = function(){
-        console.log(io);
-        io.sockets.socket(clients[0]).emit("전송!!!");
-    };
 
-    return {
-        sendLog: sendLog
-    };
-})(clients, io);
+var sendLog = function () {
+    for(var idx = 0; idx<)
+    io.sockets.connected[].emit("message", "test");
+};
 
 
-setInterval(function(){
-        console.log("test");
-        logCore.sendLog("test");
+setInterval(function () {
+        console.log("ttt");
+        sendLog("test");
     }
     , 2000);
