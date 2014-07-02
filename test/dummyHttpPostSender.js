@@ -1,54 +1,65 @@
 var http = require('http');
 
-var dummyHttpPostRequest = function (body) {
-    var bodyStr = JSON.stringify(body);
+var sendLogData = function () {
+    var log = {
+        harvesterInfo: {
+            id: "test001",
+            group: "test"
+        },
+        logs: [
+            {
+                level: "ERROR",
+                time: 1403866881,
+                message: "ERROR No appenders could be found for logger (net.sf.ehcache.CacheManager)."
+            },
+            {
+                level: "INFO",
+                time: 1403866881,
+                message: "INFO Please initialize the log4j system properly."
+            }
+        ]
+    };
+
+
+    var logString = JSON.stringify(log);
+
+    var headers = {
+        'log' : logString
+    };
 
     var options = {
         host: '127.0.0.1',
+        port: 3000,
         path: '/log',
-        port: '3000',
         method: 'POST',
-        headers : {
-            "Content-Type": "application/json",
-            "Content-Length": bodyStr.length
-        }
+        headers: headers
     };
 
+    // Setup the request.  The options parameter is
+    // the object we defined above.
     var req = http.request(options, function (res) {
-        console.log('STATUS: ' + res.statusCode);
-        console.log('HEADERS: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        res.on('data', function (chunk) {
-            console.log('BODY: ' + chunk);
+        res.setEncoding('utf-8');
+
+        var responseString = '';
+
+        res.on('data', function (data) {
+            responseString += data;
         });
+
+        res.on('end', function () {
+            //var resultObject = JSON.parse(responseString);
+        });
+
+    });
+
+    req.on('error', function (e) {
+        // TODO: handle error.
     });
 
 
-    req.write(bodyStr);
+    req.write(logString);
     req.end();
+
 };
 
-var dummyLogData  = {
-    harvesterInfo : {
-        id : "test001",
-        group : "test"
-    },
-    logs : [
-        {
-            level : "ERROR",
-            time : 1403866881,
-            message : "ERROR No appenders could be found for logger (net.sf.ehcache.CacheManager)."
-        },
-        {
-            level : "INFO",
-            time : 1403866881,
-            message : "INFO Please initialize the log4j system properly."
-        }
-    ]
-};
-
-setInterval(
-    function () {
-        dummyHttpPostRequest({"hello" : "world!"})
-    }, 2000
-);
+setInterval(sendLogData, 2000);

@@ -5,12 +5,16 @@
     <title></title>
 </head>
 <body>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io('http://localhost:3000');
     socket.on('message', function (data) {
         console.log(data);
     });
+
+    var aa = $(body).atta("data-aaa");
+
 </script>
 </body>
 </html>
